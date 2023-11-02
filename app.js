@@ -8,11 +8,15 @@ const headers = {
   "Ocp-Apim-Subscription-Key": "231e74a9bc9048819cfdd7d8c390dc25",
 };
 
+let sessionId = "ef8ccc0fea7346905e39126af41f381a";
+
 let crearSesion = () => {
+  sessionId = generarCadenaAleatoria(32);
+  console.log("Creando sesion con: ", sessionId);
   try {
     // Datos que deseas enviar en la solicitud POST
     let data = {
-      UserSessionId: generarCadenaAleatoria(32),
+      UserSessionId: sessionId,
       ProcessOrderValue: false,
     };
 
@@ -23,22 +27,30 @@ let crearSesion = () => {
     const response = axios.post(url, data, { headers });
 
     // Manejar la respuesta exitosa aquí
-    console.log("Respuesta exitosa:", response.data);
+    console.log("Sesion creada");
+    return sessionId;
   } catch (error) {
     // Manejar errores aquí
-    console.error("Error al realizar la solicitud:", error);
+    console.error("Error al crear sesion: ", error);
   }
-}
+};
 
-let agregarTicketsNuevo = () => {
+let agregarTicketsNuevo = async () => {
+  console.log("==========================");
+  console.log("AGREGANDO TICKETS NUEVOS");
+  sessionId = crearSesion();
   try {
     // Datos que deseas enviar en la solicitud POST
     const data = {
-      UserSessionId: "d43ae8e996d47eba80a8c161c3d1e4ef",
+      UserSessionId: sessionId,
       CinemaId: "0000000050",
-      SessionId: "28037",
+      SessionId: "28242",
       TicketTypes: [
-        { TicketTypeCode: "0002", LoyaltyRecognitionId: null, Qty: 2 },
+        {
+          TicketTypeCode: "0002",
+          LoyaltyRecognitionId: null,
+          Qty: 4,
+        },
       ],
       SelectedSeats: [
         {
@@ -46,14 +58,28 @@ let agregarTicketsNuevo = () => {
           special: false,
           AreaNumber: 1,
           RowIndex: 0,
-          ColumnIndex: 16,
+          ColumnIndex: 13,
         },
         {
           AreaCategoryCode: "0000000003",
           special: false,
           AreaNumber: 1,
           RowIndex: 0,
-          ColumnIndex: 15,
+          ColumnIndex: 12,
+        },
+        {
+          AreaCategoryCode: "0000000003",
+          special: false,
+          AreaNumber: 1,
+          RowIndex: 0,
+          ColumnIndex: 11,
+        },
+        {
+          AreaCategoryCode: "0000000003",
+          special: false,
+          AreaNumber: 1,
+          RowIndex: 0,
+          ColumnIndex: 10,
         },
       ],
       ReturnOrder: true,
@@ -69,83 +95,105 @@ let agregarTicketsNuevo = () => {
     const url = "https://apieu2apip02.azure-api.net/vms/api/addTickets";
 
     // Realizar la solicitud POST y esperar la respuesta
-    const response = axios.post(url, data, { headers });
+    const response = await axios.post(url, data, { headers });
 
     // Manejar la respuesta exitosa aquí
-    console.log("Respuesta exitosa:", response.data);
+    console.log("Tickets nuevos agregados");
   } catch (error) {
     // Manejar errores aquí
-    console.error("Error al realizar la solicitud:", error);
+    console.error("Error al agregar tickets nuevos");
   }
-}
+};
 
-let agregarTicketsAntiguo = () => {
-    try {
-      // Datos que deseas enviar en la solicitud POST
-      const data = {
-        UserSessionId: "d43ae8e996d47eba80a8c161c3d1e4ef",
-        CinemaId: "0000000050",
-        SessionId: "28037",
-        TicketTypes: [
-          { TicketTypeCode: "0002", LoyaltyRecognitionId: null, Qty: 2 },
-        ],
-        SelectedSeats: [
-          {
-            AreaCategoryCode: "0000000003",
-            special: false,
-            AreaNumber: 1,
-            RowIndex: 0,
-            ColumnIndex: 16,
-          },
-          {
-            AreaCategoryCode: "0000000003",
-            special: false,
-            AreaNumber: 1,
-            RowIndex: 0,
-            ColumnIndex: 15,
-          },
-        ],
-        ReturnOrder: true,
-        ReturnSeatData: false,
-        ProcessOrderValue: true,
-        UserSelectedSeatingSupported: true,
-        SkipAutoAllocation: true,
-        RemoveTickets: true,
-        RemoveTicketsQty: 2,
-      };
-  
-      // URL de destino a la que deseas enviar la solicitud POST
-      const url = "https://apieu2apip02.azure-api.net/vms/api/addTickets";
-  
-      // Realizar la solicitud POST y esperar la respuesta
-      const response = axios.post(url, data, { headers });
-  
-      // Manejar la respuesta exitosa aquí
-      console.log("Respuesta exitosa:", response.data.data);
-    } catch (error) {
-      // Manejar errores aquí
-      console.error("Error al realizar la solicitud:");
-    }
+let agregarTicketsAntiguo = async () => {
+  console.log("==========================");
+  console.log("AGREGANDO TICKETS ANTIGUOS");
+  try {
+    // Datos que deseas enviar en la solicitud POST
+    const data = {
+      UserSessionId: sessionId,
+      CinemaId: "0000000050",
+      SessionId: "28242",
+      TicketTypes: [
+        {
+          TicketTypeCode: "0002",
+          LoyaltyRecognitionId: null,
+          Qty: 4,
+        },
+      ],
+      SelectedSeats: [
+        {
+          AreaCategoryCode: "0000000003",
+          special: false,
+          AreaNumber: 1,
+          RowIndex: 0,
+          ColumnIndex: 13,
+        },
+        {
+          AreaCategoryCode: "0000000003",
+          special: false,
+          AreaNumber: 1,
+          RowIndex: 0,
+          ColumnIndex: 12,
+        },
+        {
+          AreaCategoryCode: "0000000003",
+          special: false,
+          AreaNumber: 1,
+          RowIndex: 0,
+          ColumnIndex: 11,
+        },
+        {
+          AreaCategoryCode: "0000000003",
+          special: false,
+          AreaNumber: 1,
+          RowIndex: 0,
+          ColumnIndex: 10,
+        },
+      ],
+      ReturnOrder: true,
+      ReturnSeatData: false,
+      ProcessOrderValue: true,
+      UserSelectedSeatingSupported: true,
+      SkipAutoAllocation: true,
+      RemoveTickets: true,
+      RemoveTicketsQty: 4,
+    };
+
+    // URL de destino a la que deseas enviar la solicitud POST
+    const url = "https://apieu2apip02.azure-api.net/vms/api/addTickets";
+
+    // Realizar la solicitud POST y esperar la respuesta
+    const response = await axios.post(url, data, { headers });
+
+    // Manejar la respuesta exitosa aquí
+    return "Tickets viejos agregados";
+  } catch (error) {
+    // Manejar errores aquí
+    console.error("Error al agregar tickets viejos");
+    throw error.response.status;
   }
+};
 
 let generarCadenaAleatoria = (longitud) => {
-    const caracteresPermitidos = 'abcdefghijklmnopqrstuvwxyz0123456789';
-    let cadenaAleatoria = '';
-    
-    for (let i = 0; i < longitud; i++) {
-      const caracterAleatorio = caracteresPermitidos.charAt(Math.floor(Math.random() * caracteresPermitidos.length));
-      cadenaAleatoria += caracterAleatorio;
-    }
-    
-    return cadenaAleatoria;
+  const caracteresPermitidos = "abcdefghijklmnopqrstuvwxyz0123456789";
+  let cadenaAleatoria = "";
+
+  for (let i = 0; i < longitud; i++) {
+    const caracterAleatorio = caracteresPermitidos.charAt(
+      Math.floor(Math.random() * caracteresPermitidos.length)
+    );
+    cadenaAleatoria += caracterAleatorio;
   }
 
+  return cadenaAleatoria;
+};
+
 let service = () => {
-    agregarTicketsAntiguo();
-}
+  agregarTicketsAntiguo()
+    .then((rsp) => console.log(rsp))
+    .catch(() => agregarTicketsNuevo());
+};
 
 // Llamar a la función asincrónica
-agregarTicketsAntiguo();
-//agregarTickets();
-
-//setInterval(enviarSolicitudPost, 1000);
+setInterval(service, 240000);
